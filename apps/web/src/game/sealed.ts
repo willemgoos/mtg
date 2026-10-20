@@ -110,7 +110,7 @@ export const emptySealed = (): SealedState => ({ event: null, records: {} });
 // ---------------------------------------------------------------------------
 
 /** A new seed from `seed` and a salt, so different things from one event seed don't correlate. */
-const derive = (seed: number, salt: number): number =>
+export const derive = (seed: number, salt: number): number =>
   Math.floor(rng((seed ^ Math.imul(salt + 1, 0x9e3779b1)) >>> 0)() * 4294967296) >>> 0;
 
 const PLAYER_SALT = 0;

@@ -1052,7 +1052,7 @@ export function choosePact(s: ExpeditionState, pact: PactId): ExpeditionState {
  * fetch for a basic. The rest of the pool's lands that need a commander, a
  * creature type, deserts, heroes or more opponents aren't offered.
  */
-const UTILITY_LANDS = [
+export const UTILITY_LANDS = [
   "Rogue's Passage",
   'Cryptic Caves',
   'Hidden Grotto',
@@ -1455,6 +1455,11 @@ const ARCHIVE: Partial<Record<PackSet, Record<'uncommon' | 'rare' | 'mythic', Sh
   sos: secretsOfStrixhavenArchiveSheets(),
 };
 
+/** Every card a set's boosters can hold (not the basic lands), by name. */
+export const packSetCards = (set: PackSet): string[] => [
+  ...new Set(Object.values(SHEETS[set]).flatMap((sheet) => sheet.map((c) => c.name))),
+];
+
 /** A Play Booster's slots: 14 cards. */
 export const PACK_SIZE = { common: 7, uncommon: 3, wildcard: 1, rare: 1, foil: 1, land: 1 };
 export const PACK_CARDS = Object.values(PACK_SIZE).reduce((a, b) => a + b, 0);
@@ -1851,7 +1856,7 @@ const COLOR_WORDS: Record<Color, string> = {
 const RARITY_SCORE: Record<string, number> = { common: 1, uncommon: 2, rare: 3, mythic: 4 };
 export const isLand = (name: string) => byName.get(name)?.typeLine.includes('Land') ?? false;
 const colorsOf = (name: string) => (byName.get(name)?.colors ?? []) as Color[];
-const mv = (name: string) => manaValue(byName.get(name)?.manaCost ?? '');
+export const mv = (name: string) => manaValue(byName.get(name)?.manaCost ?? '');
 
 /** Colours of mana a land makes: basics by name, others from their "Add {G}" text. */
 export function landColors(name: string): Color[] {
@@ -1922,6 +1927,28 @@ export function deckAdvice(b: Build): string[] {
 const SPELLS_PER_40 = MIN_DECK - LANDS_PER_40;
 const isCreature = (name: string) => byName.get(name)?.typeLine.includes('Creature') ?? false;
 
+/** What `pickSpells` aims for: how many spells, and the curve. */
+export interface SpellShape {
+  spells: number;
+  /** Creatures it tries to reach. */
+  creatures: number;
+  /** Good cards of mana value 2 or less it tries to reach. */
+  cheap: number;
+  /** At most this many cards of mana value 5 or more... */
+  fivePlus: number;
+  /** ...and this many of 6 or more. */
+  sixPlus: number;
+}
+
+/** A 40-card Limited deck's 23 spells. */
+const SHAPE_40: SpellShape = {
+  spells: SPELLS_PER_40,
+  creatures: 15,
+  cheap: 5,
+  fivePlus: 5,
+  sixPlus: 2,
+};
+
 /** Whether a card can be cast with these colours: every coloured symbol in its cost has one of them. */
 export function castable(name: string, colors: readonly Color[]): boolean {
   const cost = byName.get(name)?.manaCost ?? '';
@@ -1941,23 +1968,25 @@ export function pickSpells(
   fill = true,
   /** How good each card looks to the builder; a bot that misjudges cards passes its own. */
   rate: (name: string) => number = rateCard,
+  /** A bigger deck asks for more (Box Brawl's 60). */
+  shape: SpellShape = SHAPE_40,
 ): string[] {
   const rest = [...cards].sort((a, b) => rate(b) - rate(a) || mv(a) - mv(b));
   const picked: string[] = [];
   const count = (pred: (n: string) => boolean) => picked.filter(pred).length;
-  while (picked.length < SPELLS_PER_40 && rest.length) {
-    const left = SPELLS_PER_40 - picked.length;
-    const wantCreatures = Math.max(0, 15 - count(isCreature));
-    const wantCheap = Math.max(0, 5 - count((n) => mv(n) <= 2 && rate(n) >= 2));
+  while (picked.length < shape.spells && rest.length) {
+    const left = shape.spells - picked.length;
+    const wantCreatures = Math.max(0, shape.creatures - count(isCreature));
+    const wantCheap = Math.max(0, shape.cheap - count((n) => mv(n) <= 2 && rate(n) >= 2));
     let best = -1;
     let bestScore = -Infinity;
     for (let i = 0; i < rest.length; i++) {
       const n = rest[i]!;
       const cost = mv(n);
-      // At most 5 cards that cost 5+, and 2 that cost 6+.
+      // At most 5 cards that cost 5+, and 2 that cost 6+ (in a 40).
       if (
-        (cost >= 5 && count((x) => mv(x) >= 5) >= 5) ||
-        (cost >= 6 && count((x) => mv(x) >= 6) >= 2)
+        (cost >= 5 && count((x) => mv(x) >= 5) >= shape.fivePlus) ||
+        (cost >= 6 && count((x) => mv(x) >= 6) >= shape.sixPlus)
       )
         continue;
       if (wantCreatures >= left && !isCreature(n)) continue;
@@ -1973,7 +2002,7 @@ export function pickSpells(
     picked.push(rest.splice(best, 1)[0]!);
   }
   // Short of playable cards in these colours: fill with the best of what's left.
-  while (fill && picked.length < SPELLS_PER_40 && rest.length) picked.push(rest.shift()!);
+  while (fill && picked.length < shape.spells && rest.length) picked.push(rest.shift()!);
   return picked;
 }
 

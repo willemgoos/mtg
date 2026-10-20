@@ -6,11 +6,11 @@ import { packArt } from './PackOpening.tsx';
 import { UiSize } from './UiSize.tsx';
 import './home.css';
 
-export type Event = 'gauntlet' | 'expedition' | 'sealed';
+export type Event = 'gauntlet' | 'expedition' | 'sealed' | 'box';
 /** Quick matches and Brawl are single games, Jump In one game or a best of three; the events are runs. */
 export type Mode = 'quick' | 'brawl' | 'jumpIn' | Event;
 export const isEvent = (m: Mode): m is Event =>
-  m === 'gauntlet' || m === 'expedition' || m === 'sealed';
+  m === 'gauntlet' || m === 'expedition' || m === 'sealed' || m === 'box';
 const MODE_NAMES: Record<Mode, string> = {
   quick: 'Quick match',
   brawl: 'Brawl',
@@ -18,6 +18,7 @@ const MODE_NAMES: Record<Mode, string> = {
   gauntlet: 'Gauntlet',
   expedition: 'Expedition',
   sealed: 'Sealed',
+  box: 'Box Brawl',
 };
 export type Tab = 'home' | 'decks' | 'cards';
 
@@ -75,6 +76,7 @@ interface Slide {
 
 const SLIDE_MS = 8000;
 const SEALED_ART = packArt({ kind: 'booster' }, 'fdn');
+const BOX_ART = art('Mabel, Heir to Cragflame');
 
 /**
  * The home screen, after Arena's: a rotating banner of featured modes, a tile
@@ -153,6 +155,16 @@ export function Home({
       art: SEALED_ART,
       cards: [],
       go: () => (runs.sealed ? onPlay('sealed') : onDecks('sealed')),
+    },
+    {
+      id: 'box',
+      badge: 'New mode',
+      title: 'Box Brawl',
+      text: 'Crack a whole booster box, pick a legend from it as your commander, build a 60-card Brawl deck and take on bots with boxes of their own.',
+      cta: runs.box ? 'Continue' : 'Open a box',
+      art: BOX_ART,
+      cards: [],
+      go: () => (runs.box ? onPlay('box') : onDecks('box')),
     },
     {
       id: 'gauntlet',
@@ -258,6 +270,14 @@ export function Home({
               run={runs.sealed}
               on={mode === 'sealed'}
               onClick={() => onMode('sealed')}
+            />
+            <ModeTile
+              name="Box Brawl"
+              art={runs.box?.art ?? BOX_ART}
+              blurb="Open a whole box, pick a legend, build a 60-card Brawl deck"
+              run={runs.box}
+              on={mode === 'box'}
+              onClick={() => onMode('box')}
             />
             <ModeTile
               name="Quick match"

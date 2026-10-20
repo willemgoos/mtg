@@ -23,6 +23,7 @@ import { type Event, Home, isEvent, type Mode, Nav, type Tab } from './component
 import { JumpIn } from './components/JumpIn.tsx';
 import { JumpInLobby } from './components/JumpInLobby.tsx';
 import { Season } from './components/Season.tsx';
+import { BoxBrawl, boxRunSummary } from './components/BoxBrawl.tsx';
 import { Sealed, sealedRunSummary, seasonRepository } from './components/Sealed.tsx';
 import type { BotKind } from './game/bot.worker.ts';
 import './components/decks.css';
@@ -30,6 +31,7 @@ import { artFor, BLURBS } from './game/deckArt.ts';
 import { HumanMade } from './components/HumanMade.tsx';
 import * as X from './game/expedition.ts';
 import * as J from './game/jumpInMatch.ts';
+import * as B from './game/boxBrawl.ts';
 import * as S from './game/sealed.ts';
 import {
   type DeckRecord,
@@ -176,7 +178,8 @@ const SECTIONS: Section[] = [
     title: 'The Lord of the Rings',
     group: 'The Lord of the Rings',
     kind: 'starter' as const,
-    blurb: 'The Starter Kit’s two decks, Arena’s six Story Decks and four Arena players’ Constructed decks',
+    blurb:
+      'The Starter Kit’s two decks, Arena’s six Story Decks and four Arena players’ Constructed decks',
     series: 'starter' as const,
     set: 'ltr' as const,
   },
@@ -281,12 +284,15 @@ const EVENT_NAMES: Record<Event, string> = {
   gauntlet: 'Gauntlet',
   expedition: 'Expedition',
   sealed: 'Sealed',
+  box: 'Box Brawl',
 };
 
 export function App() {
   // Loading Sealed registers its decks, which a saved Sealed game needs to be recognised below.
   const [sealed, setSealed] = useState(S.loadSealed);
   const sealedNow = useRef(sealed);
+  // Box Brawl's too.
+  const [box, setBox] = useState(B.loadBox);
   // A game in progress when the page was closed or reloaded carries on.
   const [saved] = useState(loadGame);
   const [gauntlet, setGauntlet] = useState(loadGauntlet);
@@ -307,7 +313,9 @@ export function App() {
               ? 'expedition'
               : sealed.event?.match === saved.seed
                 ? 'sealed'
-                : null,
+                : box.event?.match === saved.seed
+                  ? 'box'
+                  : null,
         series: !!jumpIn.series && J.current(jumpIn.series) === saved.seed,
       },
   );
@@ -322,7 +330,9 @@ export function App() {
             ? 'gauntlet'
             : sealed.event && !sealed.event.finished
               ? 'sealed'
-              : 'quick'),
+              : box.event && !box.event.finished
+                ? 'box'
+                : 'quick'),
   );
   const [hub, setHub] = useState<Event | null>(null);
   /** Picking Jump In packets for a new expedition. */
@@ -354,7 +364,7 @@ export function App() {
   };
   const openDecks = (m: Mode) => {
     setMode(m);
-    if (m === 'sealed') return setHub('sealed');
+    if (m === 'sealed' || m === 'box') return setHub(m);
     setTab('decks');
   };
   const menu = () => {
@@ -430,10 +440,17 @@ export function App() {
       X.saveExpedition(next);
       return next;
     });
+  const updateBox = (f: (s: B.BoxState) => B.BoxState) =>
+    setBox((s) => {
+      const next = f(s);
+      B.saveBox(next);
+      return next;
+    });
   const summaries: Record<Event, RunSummary | null> = {
     gauntlet: gauntlet.run && summarize(gauntlet.run),
     expedition: expedition.run && X.summarize(expedition.run),
     sealed: sealedRunSummary(sealed.event),
+    box: boxRunSummary(box.event),
   };
   const paused = (e: Event) => {
     const m =
@@ -441,7 +458,9 @@ export function App() {
         ? gauntlet.run?.match
         : e === 'expedition'
           ? expedition.run?.match
-          : sealed.event?.match;
+          : e === 'box'
+            ? box.event?.match
+            : sealed.event?.match;
     return m != null && loadGame()?.seed === m;
   };
   const beginRun = (e: Event, deck: string) => {
@@ -496,6 +515,24 @@ export function App() {
       event: 'sealed',
     });
   };
+  const playBox = () => {
+    const e = box.event;
+    if (!e || e.finished) return;
+    const resume = paused('box') ? loadGame() : null;
+    const deck = B.boxPlayerDeck(e);
+    if (!deck || (!resume && !B.canPlay(e))) return;
+    const seed = resume?.seed ?? newSeed();
+    if (!resume) updateBox((s) => B.startBoxMatch(s, seed));
+    const foe = B.currentBoxOpponent(e);
+    setMatch({
+      choice: resume?.choice ?? { you: deck.id, them: foe.deck.id },
+      seed,
+      resume,
+      attempt: 0,
+      bot: foe.bot,
+      event: 'box',
+    });
+  };
   // Leaving a run's match keeps it saved, so the round can be resumed rather than restarted.
   const toHub = (e: Event) => {
     setMatch(null);
@@ -510,7 +547,7 @@ export function App() {
   /** Home's Play button: carry on a run, replay the last quick match, or go pick a deck. */
   const playHome = (m: Mode) => {
     setMode(m);
-    if (m === 'sealed' || (isEvent(m) && summaries[m])) return setHub(m as Event);
+    if (m === 'sealed' || m === 'box' || (isEvent(m) && summaries[m])) return setHub(m as Event);
     if (m === 'jumpIn') return setTab('decks');
     // Replay the last single game if it was in this mode (Brawl decks only play Brawl).
     const brawlDeck = lastQuick && isBrawl(deckById(lastQuick.deck));
@@ -524,6 +561,7 @@ export function App() {
     if (match?.event === 'gauntlet') updateGauntlet((s) => recordResult(s, seed, outcome));
     if (match?.event === 'expedition') updateExpedition((s) => X.recordMatch(s, seed, outcome));
     if (match?.event === 'sealed') updateSealed((s) => S.recordSealedMatch(s, seed, outcome));
+    if (match?.event === 'box') updateBox((s) => B.recordBoxMatch(s, seed, outcome));
     if (match?.series)
       updateJumpIn((s) => ({ ...s, series: s.series && J.recordGame(s.series, seed, outcome) }));
   };
@@ -566,6 +604,19 @@ export function App() {
           setTab('home');
         }}
         onSeason={() => setSeasonOpen(true)}
+      />
+    );
+  if (!match && hub === 'box')
+    return (
+      <BoxBrawl
+        state={box}
+        update={updateBox}
+        resumable={paused('box')}
+        onPlay={playBox}
+        onMenu={() => {
+          setHub(null);
+          setTab('home');
+        }}
       />
     );
   if (!match && hub === 'expedition' && expedition.run)
@@ -628,8 +679,8 @@ export function App() {
         sealedBest={Math.max(0, ...Object.values(sealed.records).map((r) => r.best)) || null}
       />
     );
-  // Sealed has no deck grid: its tile opens the event instead.
-  const startMode = mode === 'sealed' ? 'quick' : mode;
+  // Sealed and Box Brawl have no deck grid: their tiles open the event instead.
+  const startMode = mode === 'sealed' || mode === 'box' ? 'quick' : mode;
   if (!match)
     return (
       <Start

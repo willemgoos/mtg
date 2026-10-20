@@ -573,24 +573,32 @@ const prizeText = (p: { coins: number; packs: number }, set: SealedSet) =>
         .join(' and ')
     : 'No prize';
 
-/** Seven win slots and three loss marks, like Arena's event tracker. */
-function Tracker({ event }: { event: SealedEvent }) {
-  const live = statusOf(event) === 'playing';
+/** Win slots and loss marks, like Arena's event tracker (Sealed: seven and three). */
+export function Tracker({
+  wins,
+  losses,
+  maxWins,
+  maxLosses,
+  live,
+}: {
+  wins: number;
+  losses: number;
+  maxWins: number;
+  maxLosses: number;
+  live: boolean;
+}) {
   return (
     <div
       className="sealed-track"
       role="img"
-      aria-label={`${plural(event.wins, 'win')} of ${SEALED_WINS}, ${plural(event.losses, 'loss')} of ${SEALED_LOSSES}`}
+      aria-label={`${plural(wins, 'win')} of ${maxWins}, ${plural(losses, 'loss')} of ${maxLosses}`}
     >
       <div className="sealed-track__group">
         <span className="sealed-track__label">Wins</span>
         <ol className="sealed-wins">
-          {Array.from({ length: SEALED_WINS }, (_, i) => (
-            <li
-              key={i}
-              className={i < event.wins ? 'is-won' : live && i === event.wins ? 'is-next' : ''}
-            >
-              {i < event.wins ? (
+          {Array.from({ length: maxWins }, (_, i) => (
+            <li key={i} className={i < wins ? 'is-won' : live && i === wins ? 'is-next' : ''}>
+              {i < wins ? (
                 <svg viewBox="0 0 16 16" aria-hidden>
                   <path d="m3.5 8.5 3 3 6-7" />
                 </svg>
@@ -604,8 +612,8 @@ function Tracker({ event }: { event: SealedEvent }) {
       <div className="sealed-track__group">
         <span className="sealed-track__label">Losses</span>
         <ol className="sealed-losses">
-          {Array.from({ length: SEALED_LOSSES }, (_, i) => (
-            <li key={i} className={i < event.losses ? 'is-lost' : ''}>
+          {Array.from({ length: maxLosses }, (_, i) => (
+            <li key={i} className={i < losses ? 'is-lost' : ''}>
               <svg viewBox="0 0 16 16" aria-hidden>
                 <path d="m4 4 8 8M12 4l-8 8" />
               </svg>
@@ -694,7 +702,13 @@ function Hub({
         <p>{sub}</p>
       </div>
 
-      <Tracker event={e} />
+      <Tracker
+        wins={e.wins}
+        losses={e.losses}
+        maxWins={SEALED_WINS}
+        maxLosses={SEALED_LOSSES}
+        live={playing}
+      />
 
       {playing ? (
         <div className="sealed-prize">
