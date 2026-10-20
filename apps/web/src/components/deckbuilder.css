@@ -695,3 +695,37 @@
 .dbk__clear:hover {
   color: var(--h-text);
 }
+
+/* Brawl: a legend's "Commander" button under its card. */
+.dbk-card__command {
+  padding: 0.125rem 0.625rem;
+  border: 0.0625rem solid var(--h-accent);
+  border-radius: 999px;
+  background: rgba(10, 8, 6, 0.75);
+  color: var(--h-accent);
+  font-family: var(--h-font);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dbk-card__command:hover {
+  background: var(--h-accent);
+  color: var(--h-bg);
+}
+
+/* A deck card that can't stay (outside the commander's colours). */
+.dbk-row.is-blocked {
+  outline: 0.0625rem solid #d9534f;
+  outline-offset: -0.0625rem;
+}
+
+.dbk-row.is-blocked .dbk-row__name {
+  color: #ff8a80;
+  text-decoration: line-through;
+}
+
+.dbk-tile.is-blocked img {
+  filter: grayscale(0.8) brightness(0.55);
+  outline: 0.125rem solid #d9534f;
+}

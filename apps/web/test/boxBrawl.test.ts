@@ -22,7 +22,7 @@ import {
   identityOf,
   LEGEND_CHOICES,
   rankCommanders,
-  legalSide,
+  outsideColours,
   loadBox,
   moveBoxCard,
   recordBoxMatch,
@@ -33,7 +33,7 @@ import {
   statusOf,
   type BoxState,
 } from '../src/game/boxBrawl.ts';
-import { ALL_PACK_SETS, deckAdvice, packSetCards, size } from '../src/game/expedition.ts';
+import { ALL_PACK_SETS, BASICS, deckAdvice, packSetCards, size } from '../src/game/expedition.ts';
 
 const started = (seed = 7, set: (typeof ALL_PACK_SETS)[number] = 'fdn') =>
   startBox(emptyBox(), set, seed);
@@ -89,7 +89,7 @@ describe('Box Brawl box', () => {
 });
 
 describe('Box Brawl deck', () => {
-  it('takes the commander out of the pool and keeps the deck in its colour identity', () => {
+  it('takes the commander out of the pool', () => {
     const s = started();
     const e = s.event!;
     const c = commanderChoices(e).names[0]!;
@@ -98,8 +98,30 @@ describe('Box Brawl deck', () => {
     expect(t.commander).toBe(c);
     expect(t.side[c] ?? 0).toBe(before - 1);
     expect(chooseCommander(s, 'Llanowar Elves')).toBe(s);
-    const legal = legalSide(t);
-    expect(Object.keys(legal).every((n) => fits(n, identityOf(c)))).toBe(true);
+  });
+
+  it('builds before a commander: any card goes in, then off-colour ones block play', () => {
+    let s = started();
+    const c = commanderChoices(s.event!).names[0]!;
+    const off = Object.keys(s.event!.side).find((n) => !fits(n, identityOf(c)))!;
+    s = moveBoxCard(s, off, 'main');
+    expect(s.event!.main[off]).toBe(1);
+    s = chooseCommander(s, c);
+    expect(s.event!.main[off]).toBe(1);
+    expect(outsideColours(s.event!)).toEqual([off]);
+    s = {
+      ...s,
+      event: { ...s.event!, main: { ...s.event!.main, [BASICS[identityOf(c)[0]!]]: BOX_MAIN } },
+    };
+    expect(canPlay(s.event!)).toBe(false);
+    s = moveBoxCard(s, off, 'side');
+    expect(outsideColours(s.event!)).toEqual([]);
+  });
+
+  it('suggests a deck without a commander by taking the recommended one', () => {
+    const s = applyBoxSuggestion(started());
+    expect(s.event!.commander).toBe(rankCommanders(s.event!)[0]);
+    expect(canPlay(s.event!)).toBe(true);
   });
 
   it('suggests a legal 59: commander colours only, no basics in the pool', () => {
@@ -119,7 +141,7 @@ describe('Box Brawl deck', () => {
     }
   });
 
-  it('refuses cards outside the identity and drops them when the commander changes', () => {
+  it('refuses cards outside the identity and keeps them, flagged, when the commander changes', () => {
     let s = built();
     const e = s.event!;
     const off = Object.keys(e.side).find((n) => !fits(n, identityOf(e.commander!)));
@@ -130,7 +152,10 @@ describe('Box Brawl deck', () => {
     if (!other) return;
     s = chooseCommander(s, other);
     const t = s.event!;
-    expect(Object.keys(t.main).every((n) => fits(n, identityOf(other)))).toBe(true);
+    expect(outsideColours(t)).toEqual(
+      Object.keys(t.main).filter((n) => !fits(n, identityOf(other))),
+    );
+    expect(canPlay(t)).toBe(outsideColours(t).length === 0);
     // The old commander is back in the pool.
     expect(t.side[e.commander!]).toBeGreaterThan(0);
   });

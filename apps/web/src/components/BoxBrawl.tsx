@@ -1,5 +1,5 @@
 import { scryfallById, slug } from '@mtg/cards';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   applyBoxSuggestion,
   BOX_DECK,
@@ -13,18 +13,19 @@ import {
   boxBoosters,
   boxPlayerDeck,
   type BoxState,
+  canCommand,
   canPlay,
   chooseCommander,
   commanderChoices,
   currentBoxOpponent,
+  fits,
   identityOf,
   LEGEND_CHOICES,
   leaveBox,
-  legalSide,
   markBoxRevealed,
   matchNumber,
   moveBoxCard,
-  offIdentity,
+  outsideColours,
   RECOMMENDED,
   rankCommanders,
   resignBox,
@@ -92,10 +93,10 @@ export function boxRunSummary(e: BoxEvent | null): RunSummary | null {
 type Update = (f: (s: BoxState) => BoxState) => void;
 
 /**
- * Box Brawl: pick a set, open half a box, choose a commander from its legends, build a 60-card
- * Brawl deck and play until three wins or two losses. No event is the set picker, an unopened
- * box the reveal, no commander the commander pick, and otherwise the event screen (or the deck
- * builder while you edit).
+ * Box Brawl: pick a set, open half a box, build a 60-card Brawl deck with a commander from its
+ * legends and play until three wins or two losses. No event is the set picker, an unopened box
+ * the reveal, and otherwise the deck builder (straight after the reveal, and while you edit; its
+ * commander slot opens the commander pick) or the event screen.
  */
 export function BoxBrawl({
   state,
@@ -113,27 +114,31 @@ export function BoxBrawl({
 }) {
   const e = state.event;
   const [building, setBuilding] = useState(
-    () => !!e && !e.finished && !!e.commander && size(e.main) === 0,
+    () => !!e && !e.finished && (!e.commander || size(e.main) === 0),
   );
   const [picking, setPicking] = useState(false);
   if (!e) return <Picker state={state} update={update} onMenu={onMenu} />;
-  if (!e.revealed) return <Reveal event={e} onDone={() => update(markBoxRevealed)} />;
-  if (!e.finished && (!e.commander || picking))
+  if (!e.revealed)
+    return (
+      <Reveal
+        event={e}
+        onDone={() => {
+          update(markBoxRevealed);
+          setBuilding(true);
+        }}
+      />
+    );
+  if (!e.finished && picking)
     return (
       <CommanderPick
         event={e}
         onPick={(name) => {
-          const first = !e.commander;
-          update((s) => {
-            const next = chooseCommander(s, name);
-            // A first deck comes ready-made; the player can change anything.
-            return first ? applyBoxSuggestion(next) : next;
-          });
+          update((s) => chooseCommander(s, name));
           play('flip');
           setPicking(false);
           setBuilding(true);
         }}
-        onBack={e.commander ? () => setPicking(false) : undefined}
+        onBack={() => setPicking(false)}
       />
     );
   if (building && !e.finished)
@@ -272,7 +277,7 @@ function Reveal({ event, onDone }: { event: BoxEvent; onDone: () => void }) {
         set={event.set}
         eyebrow={`Box Brawl · Pack ${index + 1} of ${packs.length}`}
         note="Every card is in your pool."
-        doneLabel={last ? 'Choose a commander' : 'Next pack'}
+        doneLabel={last ? 'Build your deck' : 'Next pack'}
         onDone={() => (last ? onDone() : setIndex(index + 1))}
       />
       <div className="shell sealed-skip">
@@ -280,7 +285,7 @@ function Reveal({ event, onDone }: { event: BoxEvent; onDone: () => void }) {
           Open all
         </button>
         <button className="btn btn--ghost" onClick={onDone}>
-          Skip to commander
+          Skip to deck
         </button>
       </div>
     </>
@@ -314,7 +319,7 @@ function WholeBox({
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">Box Brawl · All {packs.length} packs</span>
-        <h1>Your box</h1>
+        <h1>Your half of the box</h1>
         <p>
           {total} cards, {cards.length} different. Rares and mythics first.
         </p>
@@ -339,7 +344,7 @@ function WholeBox({
       </div>
       <div className="gauntlet__actions">
         <button className="btn btn--primary btn--big" onClick={onDone}>
-          Choose a commander
+          Build your deck
         </button>
       </div>
       <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
@@ -358,7 +363,7 @@ function CommanderPick({
 }: {
   event: BoxEvent;
   onPick: (name: string) => void;
-  onBack?: () => void;
+  onBack: () => void;
 }) {
   const { names, gifted } = useMemo(() => commanderChoices(event), [event.seed, event.set]);
   const [hover, setHover] = useState<HoverState | null>(null);
@@ -379,8 +384,8 @@ function CommanderPick({
         <h1>Choose your commander</h1>
         <p>
           {gifted
-            ? `Your box has no legendary creature, so pick one of these ${names.length}.`
-            : `${plural(names.length, 'legend')} in your box, best first. Your deck takes only cards of its colours.`}{' '}
+            ? `Your half of the box has no legendary creature, so pick one of these ${names.length}.`
+            : `${plural(names.length, 'legend')} in your half of the box, best first. Your deck takes only cards of its colours.`}{' '}
           {names.length > RECOMMENDED &&
             'Recommended ones make the strongest decks from what you opened.'}
         </p>
@@ -411,13 +416,11 @@ function CommanderPick({
           );
         })}
       </div>
-      {onBack && (
-        <div className="gauntlet__actions">
-          <button className="btn btn--ghost" onClick={onBack}>
-            Keep {event.commander}
-          </button>
-        </div>
-      )}
+      <div className="gauntlet__actions">
+        <button className="btn btn--ghost" onClick={onBack}>
+          {event.commander ? `Keep ${event.commander}` : 'Back to the deck'}
+        </button>
+      </div>
       <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
     </div>
   );
@@ -438,17 +441,36 @@ function Builder({
   onCommander: () => void;
   onDone: () => void;
 }) {
-  const commander = event.commander!;
-  const deck = useMemo(() => boxPlayerDeck(event)!, [event]);
-  const pool = useMemo(() => legalSide(event), [event.side, event.commander]);
-  const hidden = offIdentity(event);
+  const commander = event.commander;
+  const deckId = useMemo(() => boxPlayerDeck(event)?.id, [event]);
+  const identity = commander ? identityOf(commander) : null;
+  const outside = outsideColours(event);
+  const blocked = useCallback(
+    (name: string) => (identity && !fits(name, identity) ? `Outside ${commander}’s colours` : null),
+    [commander],
+  );
+  const { names: legends, gifted } = useMemo(
+    () => commanderChoices(event),
+    [event.seed, event.set],
+  );
   const tips = useMemo(
-    () =>
-      deckAdvice(
+    () => [
+      ...(commander
+        ? []
+        : [
+            gifted
+              ? 'Your half has no legend: choose a commander from the set’s.'
+              : 'Choose a commander: a legend’s Commander button, or the commander slot.',
+          ]),
+      ...(outside.length
+        ? [`${plural(outside.length, 'card')} outside ${commander}’s colours: take them out.`]
+        : []),
+      ...deckAdvice(
         { main: event.main, side: {}, opened: 0, packs: [], fresh: [] },
         { size: BOX_MAIN, lands: BOX_LANDS },
       ),
-    [event.main],
+    ],
+    [event.main, commander, gifted, outside.length],
   );
   const [confirming, setConfirming] = useState(false);
   const suggest = () => {
@@ -459,39 +481,50 @@ function Builder({
   };
   return (
     <DeckBuilder
-      name={commander}
-      colors={identityOf(commander)}
-      art={cardArt(commander)}
+      name={commander ?? `${BOX_SET_NAMES[event.set]} box`}
+      colors={identity ?? []}
+      art={commander ? cardArt(commander) : setArt(event.set)}
       deck={event.main}
-      pool={pool}
+      pool={event.side}
       basics
-      basicsDeck={deck.id}
+      basicsDeck={deckId}
       min={BOX_MAIN}
       tips={tips}
+      blocked={blocked}
+      commandable={(name) => name !== commander && canCommand(name) && legends.includes(name)}
+      onCommand={(name) => {
+        update((s) => chooseCommander(s, name));
+        play('flip');
+      }}
       tools={
-        <>
-          <button className="btn btn--ghost" onClick={onCommander}>
-            Change commander
-          </button>
-          <button
-            className="btn btn--ghost"
-            onClick={suggest}
-            onMouseLeave={() => setConfirming(false)}
-            title={`Builds ${BOX_MAIN} cards around your commander from the box`}
-          >
-            {confirming ? 'Replace my deck?' : 'Suggest a deck'}
-          </button>
-        </>
+        <button
+          className="btn btn--ghost"
+          onClick={suggest}
+          onMouseLeave={() => setConfirming(false)}
+          title={`Builds ${BOX_MAIN} cards around ${commander ?? 'the recommended commander'} from your half of the box`}
+        >
+          {confirming ? 'Replace my deck?' : 'Suggest a deck'}
+        </button>
       }
       extraStats={
-        <span className="box-commander">
-          <img src={cardImage(commander)} alt="" draggable={false} />
+        <button
+          className={`box-commander ${commander ? '' : 'is-empty'}`}
+          onClick={onCommander}
+          title="Choose a commander from your legends"
+        >
+          {commander ? (
+            <img src={cardImage(commander)} alt="" draggable={false} />
+          ) : (
+            <span className="box-commander__slot" aria-hidden />
+          )}
           <span>
             <small>Commander, the {BOX_DECK}th card</small>
-            <strong>{commander}</strong>
-            {hidden > 0 && <small>{plural(hidden, 'card')} outside its colours hidden</small>}
+            <strong>{commander ?? 'Choose a commander'}</strong>
+            <small>
+              {commander ? 'Change' : plural(legends.length, 'legend') + ' to pick from'}
+            </small>
           </span>
-        </span>
+        </button>
       }
       onAdd={(name) => update((s) => moveBoxCard(s, name, 'main'))}
       onRemove={(name) => update((s) => moveBoxCard(s, name, 'side'))}
@@ -528,6 +561,7 @@ function Hub({
   );
   const cards = size(e.main) + (e.commander ? 1 : 0);
   const ready = canPlay(e);
+  const outside = outsideColours(e);
 
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -592,7 +626,7 @@ function Hub({
           />
           <div className="sealed-box__text">
             <span className="sealed-box__label">Your commander</span>
-            <span className="sealed-box__name">{e.commander}</span>
+            <span className="sealed-box__name">{e.commander ?? 'Not chosen yet'}</span>
             <span className="sealed-box__meta">
               {e.commander && <Pips name={e.commander} />}
               {plural(cards, 'card')}
@@ -624,7 +658,11 @@ function Hub({
 
       {playing && !ready && !resumable && (
         <p className="sealed-reason">
-          Your deck has {plural(cards, 'card')}; it needs {BOX_DECK} with the commander to play.
+          {!e.commander
+            ? 'Choose a commander in the deck builder to play.'
+            : outside.length
+              ? `${plural(outside.length, 'card')} in your deck ${outside.length === 1 ? 'is' : 'are'} outside ${e.commander}’s colours.`
+              : `Your deck has ${plural(cards, 'card')}; it needs ${BOX_DECK} with the commander to play.`}
         </p>
       )}
 

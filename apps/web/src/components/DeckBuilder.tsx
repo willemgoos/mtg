@@ -202,6 +202,9 @@ export function DeckBuilder({
   tips = [],
   tools,
   extraStats,
+  blocked,
+  commandable,
+  onCommand,
   onAdd,
   onRemove,
   onBuildPair,
@@ -227,6 +230,11 @@ export function DeckBuilder({
   tools?: ReactNode;
   /** A mode's own line under the deck stats, e.g. Season's deck strength. */
   extraStats?: ReactNode;
+  /** Why a card can't go in the deck (e.g. outside a commander's colours), or null when it can. Such cards show greyed out. */
+  blocked?: (name: string) => string | null;
+  /** Cards that can be made the commander (Brawl): they get a "Commander" button. */
+  commandable?: (name: string) => boolean;
+  onCommand?: (name: string) => void;
   onAdd: (name: string) => void;
   onRemove: (name: string) => void;
   /** Builds a whole deck in this colour pair (a mode's own deck builder). Without it, colour advice only shows cards. */
@@ -300,9 +308,17 @@ export function DeckBuilder({
   const hints = useMemo(
     () =>
       Object.values(deck).reduce((a, b) => a + b, 0) < min
-        ? completionHints({ deck, pool, min, basics })
+        ? completionHints({
+            deck,
+            // Only what may go in (e.g. a commander's colours).
+            pool: blocked
+              ? Object.fromEntries(Object.entries(pool).filter(([n]) => !blocked(n)))
+              : pool,
+            min,
+            basics,
+          })
         : [],
-    [deck, pool, min, basics],
+    [deck, pool, min, basics, blocked],
   );
   const hinted = useMemo(
     () => new Map(hints.filter((h) => !basicColor.has(h.name)).map((h) => [h.name, h])),
@@ -350,7 +366,7 @@ export function DeckBuilder({
   live.current = { deck, pool, basics };
   const log = (ops: Op[]) => ops.length && setHistory((h) => [...h.slice(-49), ops]);
   const add = (e: DeckEntry) => {
-    if (!isFree(e) && !e.count) return;
+    if ((!isFree(e) && !e.count) || blocked?.(e.name)) return;
     onAdd(e.name);
     log([{ op: 'add', name: e.name }]);
     play('place', { gain: 0.6 });
@@ -696,7 +712,8 @@ export function DeckBuilder({
             {shown.map((e) => {
               const free = isFree(e);
               const inDeck = deck[e.name] ?? 0;
-              const out = !free && !e.count;
+              const barred = blocked?.(e.name) ?? null;
+              const out = (!free && !e.count) || !!barred;
               const rarity = rarityOf(e.name);
               return (
                 <div key={e.name} className={`dbk-card ${out ? 'is-out' : ''}`}>
@@ -714,11 +731,13 @@ export function DeckBuilder({
                     aria-disabled={out}
                     aria-label={`${e.name}${free ? '' : `, ${e.count} left`}`}
                     title={
-                      out
-                        ? 'All copies are in your deck'
-                        : marking && hinted.has(e.name)
-                          ? `Suggested: ${hinted.get(e.name)!.reason}`
-                          : 'Add to the deck'
+                      barred
+                        ? barred
+                        : out
+                          ? 'All copies are in your deck'
+                          : marking && hinted.has(e.name)
+                            ? `Suggested: ${hinted.get(e.name)!.reason}`
+                            : 'Add to the deck'
                     }
                     draggable={!out}
                     onDragStart={startDrag('pool', e)}
@@ -749,6 +768,18 @@ export function DeckBuilder({
                     )}
                     {inDeck > 0 && <span className="dbk-card__in">{inDeck}</span>}
                   </div>
+                  {onCommand && commandable?.(e.name) && (
+                    <button
+                      className="dbk-card__command"
+                      title={`Make ${e.name} your commander`}
+                      onClick={() => {
+                        setHover(null);
+                        onCommand(e.name);
+                      }}
+                    >
+                      Commander
+                    </button>
+                  )}
                   <span className="dbk-card__copies" aria-hidden>
                     {free
                       ? '∞'
@@ -858,7 +889,8 @@ export function DeckBuilder({
                             key={e.name}
                             className={`dbk-tile ${gap ? 'has-gap' : ''} ${
                               drag?.name === e.name && drag.from === 'deck' ? 'is-dragging' : ''
-                            }`}
+                            } ${blocked?.(e.name) ? 'is-blocked' : ''}`}
+                            title={blocked?.(e.name) ?? undefined}
                             aria-label={`${e.name}${e.count > 1 ? `, ${e.count} copies` : ''}. Take one out`}
                             draggable
                             onDragStart={startDrag('deck', e)}
@@ -1040,8 +1072,12 @@ export function DeckBuilder({
                         key={e.name}
                         className={`dbk-row ${
                           drag?.name === e.name && drag.from === 'deck' ? 'is-dragging' : ''
-                        }`}
-                        title="Take one out of the deck"
+                        } ${blocked?.(e.name) ? 'is-blocked' : ''}`}
+                        title={
+                          blocked?.(e.name)
+                            ? `${blocked(e.name)}: take it out`
+                            : 'Take one out of the deck'
+                        }
                         draggable
                         onDragStart={startDrag('deck', e)}
                         onDragEnd={endDrag}

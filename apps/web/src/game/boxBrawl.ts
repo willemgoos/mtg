@@ -24,9 +24,11 @@ import { BOT_ODDS, derive, misjudged } from './sealed.ts';
 
 /*
  * Box Brawl: split a booster box of one set (36 Play Boosters) with your first opponent, 18
- * each, pick a legendary creature from your half as your commander and build a 60-card Brawl deck around it (the commander and 59
- * cards of its colour identity, basics free). A box has repeats, so unlike Brawl the deck may
- * hold more than one copy of a card. Then play best-of-one Brawl games (25 life, commander
+ * each, and build a 60-card Brawl deck from your half: a legendary creature as the commander
+ * and 59 cards of its colour identity, basics free. As in Arena's Brawl builder the commander
+ * is a slot in the deck: you may pick it before or after the other cards, and cards outside its
+ * colours can't go in. A box has repeats, so unlike Brawl the deck may hold more than one copy
+ * of a card. Then play best-of-one Brawl games (25 life, commander
  * tax) against bots, until three wins or two losses. The first opponent plays the other half of
  * your box; later ones bring a half of a box of their own.
  *
@@ -35,7 +37,7 @@ import { BOT_ODDS, derive, misjudged } from './sealed.ts';
  * Box Brawl stands apart from Season: it keeps no cards and pays no prize (a box is a lot of
  * cards). Everything is pure state plus localStorage; the box, every opponent and its skill
  * come from the event seed. Flow for the UI:
- *   startBox -> boxBoosters (reveal) -> chooseCommander -> edit the deck (moveBoxCard,
+ *   startBox -> boxBoosters (reveal) -> edit the deck (moveBoxCard, chooseCommander,
  *   applyBoxSuggestion) -> startBoxMatch -> play `currentBoxOpponent(...)` with
  *   `boxPlayerDeck` -> recordBoxMatch -> ... -> leaveBox.
  */
@@ -263,8 +265,9 @@ function bump(c: Counts, name: string, by: number): Counts {
 
 /**
  * Makes `name` the commander (one of `commanderChoices`). A copy from the box comes out of the
- * pool (or the deck), the old commander goes back to the pool, and cards outside the new
- * colour identity leave the deck.
+ * pool (or the deck) and the old commander goes back to the pool. Cards already in the deck
+ * stay, even outside the new colours: `outsideColours` lists them and the deck can't be played
+ * until they're out.
  */
 export function chooseCommander(s: BoxState, name: string): BoxState {
   return withEvent(s, (e) => {
@@ -276,24 +279,18 @@ export function chooseCommander(s: BoxState, name: string): BoxState {
       if (side[name]) side = bump(side, name, -1);
       else main = bump(main, name, -1);
     }
-    const identity = identityOf(name);
-    for (const [n, k] of Object.entries(main)) {
-      if (fits(n, identity)) continue;
-      main = bump(main, n, -k);
-      if (!isBasic(n)) side = bump(side, n, k);
-    }
     return { ...e, commander: name, main, side };
   });
 }
 
 /**
- * Moves one copy between deck and pool. Only cards of the commander's colour identity go in.
- * Basic lands come from and go back to the free supply.
+ * Moves one copy between deck and pool. Once there is a commander, only cards of its colour
+ * identity go in. Basic lands come from and go back to the free supply.
  */
 export function moveBoxCard(s: BoxState, name: string, to: 'main' | 'side'): BoxState {
   return withEvent(s, (e) => {
-    if (!byName.has(name) || !e.commander) return e;
-    if (to === 'main' && !fits(name, identityOf(e.commander))) return e;
+    if (!byName.has(name)) return e;
+    if (to === 'main' && e.commander && !fits(name, identityOf(e.commander))) return e;
     if (isBasic(name))
       return to === 'main'
         ? { ...e, main: bump(e.main, name, 1) }
@@ -306,16 +303,12 @@ export function moveBoxCard(s: BoxState, name: string, to: 'main' | 'side'): Box
   });
 }
 
-/** The pool's cards that fit the commander (what the deck builder offers). */
-export function legalSide(e: Pick<BoxEvent, 'commander' | 'side'>): Counts {
-  if (!e.commander) return {};
+/** Deck cards outside the commander's colours (none before a commander is chosen). */
+export function outsideColours(e: Pick<BoxEvent, 'commander' | 'main'>): string[] {
+  if (!e.commander) return [];
   const identity = identityOf(e.commander);
-  return Object.fromEntries(Object.entries(e.side).filter(([n]) => fits(n, identity)));
+  return Object.keys(e.main).filter((n) => !fits(n, identity));
 }
-
-/** Pool cards that don't fit the commander (hidden from the builder). */
-export const offIdentity = (e: Pick<BoxEvent, 'commander' | 'side'>): number =>
-  size(e.side) - size(legalSide(e));
 
 // ---------------------------------------------------------------------------
 // Suggested deck
@@ -460,8 +453,13 @@ export function rankCommanders(e: Pick<BoxEvent, 'seed' | 'set'>): string[] {
   return ranked;
 }
 
-/** Replaces the deck with the suggested 59; the rest of the box goes to `side`. */
+/**
+ * Replaces the deck with the suggested 59; the rest of the box goes to `side`. Without a
+ * commander it first takes the recommended one.
+ */
 export function applyBoxSuggestion(s: BoxState): BoxState {
+  if (s.event && !s.event.finished && !s.event.commander)
+    s = chooseCommander(s, rankCommanders(s.event)[0]!);
   return withEvent(s, (e) => {
     if (!e.commander) return e;
     const pool: Counts = { ...e.side };
@@ -471,9 +469,9 @@ export function applyBoxSuggestion(s: BoxState): BoxState {
   });
 }
 
-/** The deck is ready: a commander and at least 59 more cards. */
+/** The deck is ready: a commander and at least 59 more cards, all of its colours. */
 export const canPlay = (e: Pick<BoxEvent, 'commander' | 'main'>): boolean =>
-  !!e.commander && size(e.main) >= BOX_MAIN;
+  !!e.commander && size(e.main) >= BOX_MAIN && !outsideColours(e).length;
 
 // ---------------------------------------------------------------------------
 // Decklists
