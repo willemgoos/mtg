@@ -427,6 +427,32 @@ export function suggestBoxDeck(
   return { main, side, spells, score: focus.score };
 }
 
+/** How many legends the commander pick marks as recommended. */
+export const RECOMMENDED = 3;
+
+const rankCache = new Map<string, string[]>();
+
+/**
+ * The commander choices, strongest deck first: each legend's suggested deck from the whole box,
+ * judged as a bot judges its own (the deck plus the commander itself).
+ */
+export function rankCommanders(e: Pick<BoxEvent, 'seed' | 'set'>): string[] {
+  const key = `${e.seed}:${e.set}`;
+  let ranked = rankCache.get(key);
+  if (!ranked) {
+    const pool = boxPool(e);
+    ranked = commanderChoices(e)
+      .names.map((c) => ({
+        c,
+        score: suggestBoxDeck(pool[c] ? bump(pool, c, -1) : pool, c).score + 2 * rateCard(c),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .map((x) => x.c);
+    rankCache.set(key, ranked);
+  }
+  return ranked;
+}
+
 /** Replaces the deck with the suggested 59; the rest of the box goes to `side`. */
 export function applyBoxSuggestion(s: BoxState): BoxState {
   return withEvent(s, (e) => {

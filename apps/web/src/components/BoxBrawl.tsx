@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   applyBoxSuggestion,
   BOX_DECK,
+  BOX_LANDS,
   BOX_LOSSES,
   BOX_MAIN,
   BOX_PACKS,
@@ -24,12 +25,14 @@ import {
   matchNumber,
   moveBoxCard,
   offIdentity,
+  RECOMMENDED,
+  rankCommanders,
   resignBox,
   startBox,
   statusOf,
 } from '../game/boxBrawl.ts';
 import { artFor } from '../game/deckArt.ts';
-import { ALL_PACK_SETS, type PackSet, size } from '../game/expedition.ts';
+import { ALL_PACK_SETS, deckAdvice, type PackSet, size } from '../game/expedition.ts';
 import { burst, flash, later, mountFx } from '../game/fx.ts';
 import type { RunSummary } from '../game/gauntlet.ts';
 import { ruleNotes } from '../game/notes.ts';
@@ -289,7 +292,7 @@ function WholeBox({
   packs,
   onDone,
 }: {
-  packs: readonly { cards: string[] }[];
+  packs: readonly { cards: string[]; foil?: number }[];
   onDone: () => void;
 }) {
   const cards = useMemo(() => {
@@ -299,6 +302,11 @@ function WholeBox({
       ([a], [b]) => RANK[rarityOf(b)] - RANK[rarityOf(a)] || a.localeCompare(b),
     );
   }, [packs]);
+  // A card shows foil when any of its copies came in a pack's foil slot.
+  const foils = useMemo(
+    () => new Set(packs.flatMap((p) => (p.foil === undefined ? [] : [p.cards[p.foil]!]))),
+    [packs],
+  );
   const total = packs.reduce((k, p) => k + p.cards.length, 0);
   const [hover, setHover] = useState<HoverState | null>(null);
   return (
@@ -318,7 +326,7 @@ function WholeBox({
           return (
             <span
               key={name}
-              className={`sealed-all__card sealed-all__card--${rarityOf(name)}`}
+              className={`sealed-all__card sealed-all__card--${rarityOf(name)} ${foils.has(name) ? 'is-foil' : ''}`}
               style={{ '--i': i } as React.CSSProperties}
               onMouseEnter={(e) => setHover({ defId, anchor: e.currentTarget })}
               onMouseLeave={() => setHover(null)}
@@ -354,6 +362,15 @@ function CommanderPick({
 }) {
   const { names, gifted } = useMemo(() => commanderChoices(event), [event.seed, event.set]);
   const [hover, setHover] = useState<HoverState | null>(null);
+  // Building a deck for every legend takes a moment in a big box: show the cards first.
+  const [best, setBest] = useState<ReadonlySet<string>>(new Set());
+  useEffect(() => {
+    const t = window.setTimeout(
+      () => setBest(new Set(rankCommanders(event).slice(0, RECOMMENDED))),
+      50,
+    );
+    return () => window.clearTimeout(t);
+  }, [event.seed, event.set]);
   return (
     <div className="start shell sealed-all box-pick">
       <UiSize />
@@ -363,7 +380,9 @@ function CommanderPick({
         <p>
           {gifted
             ? `Your box has no legendary creature, so pick one of these ${names.length}.`
-            : `${plural(names.length, 'legend')} in your box, best first. Your deck takes only cards of its colours.`}
+            : `${plural(names.length, 'legend')} in your box, best first. Your deck takes only cards of its colours.`}{' '}
+          {names.length > RECOMMENDED &&
+            'Recommended ones make the strongest decks from what you opened.'}
         </p>
       </div>
       <div className="sealed-all__grid">
@@ -382,6 +401,9 @@ function CommanderPick({
               onMouseLeave={() => setHover(null)}
             >
               {img ? <img src={img} alt={name} loading="lazy" draggable={false} /> : name}
+              {names.length > RECOMMENDED && best.has(name) && (
+                <span className="box-pick__tag">Recommended</span>
+              )}
               <span className="box-pick__pips">
                 <Pips name={name} />
               </span>
@@ -420,6 +442,14 @@ function Builder({
   const deck = useMemo(() => boxPlayerDeck(event)!, [event]);
   const pool = useMemo(() => legalSide(event), [event.side, event.commander]);
   const hidden = offIdentity(event);
+  const tips = useMemo(
+    () =>
+      deckAdvice(
+        { main: event.main, side: {}, opened: 0, packs: [], fresh: [] },
+        { size: BOX_MAIN, lands: BOX_LANDS },
+      ),
+    [event.main],
+  );
   const [confirming, setConfirming] = useState(false);
   const suggest = () => {
     if (size(event.main) && !confirming) return setConfirming(true);
@@ -437,6 +467,7 @@ function Builder({
       basics
       basicsDeck={deck.id}
       min={BOX_MAIN}
+      tips={tips}
       tools={
         <>
           <button className="btn btn--ghost" onClick={onCommander}>

@@ -1867,16 +1867,20 @@ export function landColors(name: string): Color[] {
 }
 
 /** Plain-language notes on the deck: land count, colours and mana curve. */
-export function deckAdvice(b: Build): string[] {
+export function deckAdvice(
+  b: Build,
+  /** A bigger deck: its size and usual land count (Box Brawl's 59 beside the commander, 24 lands). */
+  deck: { size: number; lands: number } = { size: MIN_DECK, lands: LANDS_PER_40 },
+): string[] {
   const total = size(b.main);
-  if (total < MIN_DECK) return [];
+  if (total < deck.size) return [];
   const cards = Object.entries(b.main);
   const count = (pred: (name: string) => boolean) =>
     cards.filter(([n]) => pred(n)).reduce((k, [, c]) => k + c, 0);
   const notes: string[] = [];
 
   const lands = count(isLand);
-  const want = Math.round((total * LANDS_PER_40) / 40);
+  const want = Math.round((total * deck.lands) / deck.size);
   if (lands < want - 2)
     notes.push(
       `Only ${lands} lands. About ${want} is usual for ${total} cards, so you can cast your spells on time.`,
@@ -1885,8 +1889,10 @@ export function deckAdvice(b: Build): string[] {
     notes.push(
       `${lands} lands is a lot. About ${want} is usual, which leaves more room for spells.`,
     );
-  if (total > 42)
-    notes.push(`${total} cards. Trimming toward 40 means you draw your best cards more often.`);
+  if (total > deck.size + 2)
+    notes.push(
+      `${total} cards. Trimming toward ${deck.size} means you draw your best cards more often.`,
+    );
 
   const needs = spellColors(b.main);
   const perColor = COLORS.map((c) => ({ c, n: needs.get(c) ?? 0 })).filter((x) => x.n > 0);

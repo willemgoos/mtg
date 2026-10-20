@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   applyBoxSuggestion,
   BOX_LOSSES,
+  BOX_LANDS,
   BOX_MAIN,
   BOX_PACKS,
   BOX_WINS,
@@ -20,6 +21,7 @@ import {
   giftedLegends,
   identityOf,
   LEGEND_CHOICES,
+  rankCommanders,
   legalSide,
   loadBox,
   moveBoxCard,
@@ -31,7 +33,7 @@ import {
   statusOf,
   type BoxState,
 } from '../src/game/boxBrawl.ts';
-import { ALL_PACK_SETS, packSetCards, size } from '../src/game/expedition.ts';
+import { ALL_PACK_SETS, deckAdvice, packSetCards, size } from '../src/game/expedition.ts';
 
 const started = (seed = 7, set: (typeof ALL_PACK_SETS)[number] = 'fdn') =>
   startBox(emptyBox(), set, seed);
@@ -130,6 +132,23 @@ describe('Box Brawl deck', () => {
     expect(Object.keys(t.main).every((n) => fits(n, identityOf(other)))).toBe(true);
     // The old commander is back in the pool.
     expect(t.side[e.commander!]).toBeGreaterThan(0);
+  });
+
+  it('ranks every legend by the deck it makes', () => {
+    const e = started().event!;
+    const ranked = rankCommanders(e);
+    expect([...ranked].sort()).toEqual([...commanderChoices(e).names].sort());
+    expect(rankCommanders(e)).toBe(ranked);
+  });
+
+  it('gives deck tips sized for 59 cards and 24 lands', () => {
+    const e = built().event!;
+    const b = { main: e.main, side: {}, opened: 0, packs: [], fresh: [] };
+    const deck = { size: BOX_MAIN, lands: BOX_LANDS };
+    expect(deckAdvice(b, deck).some((t) => /lands/.test(t))).toBe(false);
+    expect(deckAdvice(b, deck).some((t) => /toward 40/.test(t))).toBe(false);
+    const flood = { ...b, main: { ...e.main, Plains: (e.main.Plains ?? 0) + 10 } };
+    expect(deckAdvice(flood, deck).join(' ')).toMatch(/lands is a lot/);
   });
 
   it('makes a Brawl decklist with the commander', () => {
