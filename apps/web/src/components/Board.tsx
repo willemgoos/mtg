@@ -644,6 +644,8 @@ export function Board({
             targeting.anyNumber || targeting.chosen.length > 0 ? 'Done' : 'Skip',
             () => act(targeting.skip!),
           ],
+          // A spell with "up to" targets (Beat a Path) can still be backed out of while it's being cast.
+          secondary: d.kind === 'priority' ? ['Cancel', () => setTargeting(null)] : undefined,
         };
       if (d.kind === 'chooseTriggerTargets') return { prompt };
       return { prompt, secondary: ['Cancel', () => setTargeting(null)] };
@@ -990,7 +992,9 @@ export function Board({
       } else if (e.key === 'h' || e.key === 'H') {
         askRef.current();
       } else if (e.key === 'Escape') {
-        setTargeting((t) => (t?.skip || d.kind === 'chooseTriggerTargets' ? t : null));
+        setTargeting((t) =>
+          (t?.skip && d.kind !== 'priority') || d.kind === 'chooseTriggerTargets' ? t : null,
+        );
         setBlocker(null);
         setMenu(null);
         setCastMenu(null);
