@@ -304,8 +304,27 @@ body {
 }
 
 .row--lands {
+  /* Lands left of the portrait, other permanents right of it, the middle kept clear (Arena). */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--portrait-clear, 9rem) minmax(0, 1fr);
   min-height: var(--lh);
+  gap: 0;
+}
+
+.row__side {
+  display: flex;
+  align-items: inherit;
   gap: 1.125rem;
+  min-width: 0;
+}
+
+.row__side--lands {
+  justify-content: flex-end;
+}
+
+.row__side--others {
+  grid-column: 3;
+  justify-content: flex-start;
 }
 
 .midline {

@@ -199,85 +199,94 @@ export function Battlefield({
     </div>
   );
 
+  // As on Arena, the back row keeps clear of the portrait: lands to its left, other
+  // permanents (artifacts, enchantments, planeswalkers) to its right.
   const landRow = (
     <div className="row row--lands">
-      {[...groups].map(([defId, ids]) => {
-        // Arena splits a name's lands into an untapped and a tapped pile. One element
-        // holds both, so a land that taps slides across (and turns) instead of remounting.
-        const nu = ids.filter((id) => !view.objects[id]!.tapped).length;
-        const nt = ids.length - nu;
-        let u = 0;
-        let t = 0;
-        return (
-          <div
-            className="land-stack"
-            key={defId}
-            style={{ '--nu': nu, '--nt': nt, '--a': +!!nu, '--b': +!!nt } as React.CSSProperties}
-          >
-            {ids.map((id) => {
-              const tapped = !!view.objects[id]!.tapped;
-              return (
-                <Card
-                  key={id}
-                  id={id}
-                  defId={defId}
-                  size="land"
-                  tapped={tapped}
-                  mark={h.markOf(id)}
-                  style={{ '--i': tapped ? t++ : u++, '--t': +tapped } as React.CSSProperties}
-                  onClick={() => h.onCard(id)}
-                  onHover={h.onHover}
-                />
-              );
-            })}
-            {nu > 1 && <span className="land-stack__count">×{nu}</span>}
-            {nt > 1 && <span className="land-stack__count land-stack__count--tapped">×{nt}</span>}
-          </div>
-        );
-      })}
-      {otherPiles.map((pile) => {
-        const card = (id: ObjectId, style?: React.CSSProperties) => {
-          const o = view.objects[id]!;
-          const def = cardDb.get(o.defId);
+      <div className="row__side row__side--lands">
+        {[...groups].map(([defId, ids]) => {
+          // Arena splits a name's lands into an untapped and a tapped pile. One element
+          // holds both, so a land that taps slides across (and turns) instead of remounting.
+          const nu = ids.filter((id) => !view.objects[id]!.tapped).length;
+          const nt = ids.length - nu;
+          let u = 0;
+          let t = 0;
           return (
-            <Card
-              key={id}
-              id={id}
-              defId={o.defId}
-              size="land"
-              tapped={o.tapped}
-              mark={h.markOf(id)}
-              {...(style ? { style } : {})}
-              {...(def?.types.includes('Planeswalker')
-                ? { loyalty: o.counters?.loyalty ?? 0 }
-                : {})}
-              tags={cardTags(o, def, view)}
-              onClick={() => h.onCard(id)}
-              onHover={h.onHover}
-            />
+            <div
+              className="land-stack"
+              key={defId}
+              style={{ '--nu': nu, '--nt': nt, '--a': +!!nu, '--b': +!!nt } as React.CSSProperties}
+            >
+              {ids.map((id) => {
+                const tapped = !!view.objects[id]!.tapped;
+                return (
+                  <Card
+                    key={id}
+                    id={id}
+                    defId={defId}
+                    size="land"
+                    tapped={tapped}
+                    mark={h.markOf(id)}
+                    style={{ '--i': tapped ? t++ : u++, '--t': +tapped } as React.CSSProperties}
+                    onClick={() => h.onCard(id)}
+                    onHover={h.onHover}
+                  />
+                );
+              })}
+              {nu > 1 && <span className="land-stack__count">×{nu}</span>}
+              {nt > 1 && <span className="land-stack__count land-stack__count--tapped">×{nt}</span>}
+            </div>
           );
-        };
-        if (pile.length === 1) return card(pile[0]!);
-        // Like a land pile: untapped and tapped copies side by side, each with its count.
-        const nu = pile.filter((id) => !view.objects[id]!.tapped).length;
-        const nt = pile.length - nu;
-        let u = 0;
-        let t = 0;
-        return (
-          <div
-            className="land-stack"
-            key={pile[0]}
-            style={{ '--nu': nu, '--nt': nt, '--a': +!!nu, '--b': +!!nt } as React.CSSProperties}
-          >
-            {pile.map((id) => {
-              const tapped = !!view.objects[id]!.tapped;
-              return card(id, { '--i': tapped ? t++ : u++, '--t': +tapped } as React.CSSProperties);
-            })}
-            {nu > 1 && <span className="land-stack__count">×{nu}</span>}
-            {nt > 1 && <span className="land-stack__count land-stack__count--tapped">×{nt}</span>}
-          </div>
-        );
-      })}
+        })}
+      </div>
+      <div className="row__side row__side--others">
+        {otherPiles.map((pile) => {
+          const card = (id: ObjectId, style?: React.CSSProperties) => {
+            const o = view.objects[id]!;
+            const def = cardDb.get(o.defId);
+            return (
+              <Card
+                key={id}
+                id={id}
+                defId={o.defId}
+                size="land"
+                tapped={o.tapped}
+                mark={h.markOf(id)}
+                {...(style ? { style } : {})}
+                {...(def?.types.includes('Planeswalker')
+                  ? { loyalty: o.counters?.loyalty ?? 0 }
+                  : {})}
+                tags={cardTags(o, def, view)}
+                onClick={() => h.onCard(id)}
+                onHover={h.onHover}
+              />
+            );
+          };
+          if (pile.length === 1) return card(pile[0]!);
+          // Like a land pile: untapped and tapped copies side by side, each with its count.
+          const nu = pile.filter((id) => !view.objects[id]!.tapped).length;
+          const nt = pile.length - nu;
+          let u = 0;
+          let t = 0;
+          return (
+            <div
+              className="land-stack"
+              key={pile[0]}
+              style={{ '--nu': nu, '--nt': nt, '--a': +!!nu, '--b': +!!nt } as React.CSSProperties}
+            >
+              {pile.map((id) => {
+                const tapped = !!view.objects[id]!.tapped;
+                return card(id, {
+                  '--i': tapped ? t++ : u++,
+                  '--t': +tapped,
+                } as React.CSSProperties);
+              })}
+              {nu > 1 && <span className="land-stack__count">×{nu}</span>}
+              {nt > 1 && <span className="land-stack__count land-stack__count--tapped">×{nt}</span>}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 
