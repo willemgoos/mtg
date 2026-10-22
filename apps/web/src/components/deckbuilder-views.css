@@ -216,7 +216,8 @@
 
 .dbk__pool.is-target,
 .dbk__tray.is-target,
-.dbk__drop.is-target {
+.dbk__drop.is-target,
+.dbk__sideboard.is-target {
   transition: background 0.15s;
   box-shadow: inset 0 0 0 0.125rem rgba(244, 177, 62, 0.35);
   background: rgba(244, 177, 62, 0.04);
@@ -224,7 +225,8 @@
 
 .dbk__pool.is-over,
 .dbk__tray.is-over,
-.dbk__drop.is-over {
+.dbk__drop.is-over,
+.dbk__sideboard.is-over {
   box-shadow: inset 0 0 0 0.125rem var(--h-accent);
   background: rgba(244, 177, 62, 0.1);
 }

@@ -42,6 +42,7 @@ import {
   total,
 } from '../game/deckView.ts';
 import { ruleNotes } from '../game/notes.ts';
+import { bumpSide, fitSide, loadSideboard, saveSideboard } from '../game/sideboard.ts';
 import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import './home.css';
@@ -152,11 +153,14 @@ function matches(
   return `${e.name}\n${e.typeLine}\n${text}`.toLowerCase().includes(query);
 }
 
-/** One change to the deck, for undo. */
+/** One change to the deck or sideboard, for undo. `side+`/`side-` move a card between the pool and the sideboard. */
 interface Op {
-  op: 'add' | 'remove';
+  op: 'add' | 'remove' | 'side+' | 'side-';
   name: string;
 }
+
+/** Where a card can be: the collection, the deck or the sideboard. */
+type Zone = 'pool' | 'deck' | 'side';
 
 /** Closes a popover on a click outside it or Escape. */
 function useDismiss(open: boolean, close: () => void) {
@@ -203,6 +207,7 @@ export function DeckBuilder({
   tools,
   extraStats,
   blocked,
+  sideboardKey,
   commandable,
   onCommand,
   onAdd,
@@ -232,6 +237,8 @@ export function DeckBuilder({
   extraStats?: ReactNode;
   /** Why a card can't go in the deck (e.g. outside a commander's colours), or null when it can. Such cards show greyed out. */
   blocked?: (name: string) => string | null;
+  /** Where this deck's sideboard (a "maybe" pile) is kept, e.g. `sealed:<id>`. Without it there is no sideboard. */
+  sideboardKey?: string;
   /** Cards that can be made the commander (Brawl): they get a "Commander" button. */
   commandable?: (name: string) => boolean;
   onCommand?: (name: string) => void;
@@ -269,8 +276,13 @@ export function DeckBuilder({
   const stageRef = useRef<HTMLDivElement>(null);
   const [moreOpen, setMoreOpen] = useState(false);
   const [landsOpen, setLandsOpen] = useState(false);
-  const [drag, setDrag] = useState<{ from: 'pool' | 'deck'; name: string } | null>(null);
-  const [over, setOver] = useState<'pool' | 'deck' | null>(null);
+  const [drag, setDrag] = useState<{ from: Zone; name: string } | null>(null);
+  const [over, setOver] = useState<Zone | null>(null);
+  // The sideboard as saved; what shows is limited to the copies still outside the deck.
+  const [sideSaved, setSideSaved] = useState<Counts>(() =>
+    sideboardKey ? loadSideboard(sideboardKey) : {},
+  );
+  useEffect(() => setSideSaved(sideboardKey ? loadSideboard(sideboardKey) : {}), [sideboardKey]);
   const [history, setHistory] = useState<Op[][]>([]);
   const [hover, setHoverState] = useState<HoverState | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -287,12 +299,17 @@ export function DeckBuilder({
         })
       : es;
   const main = useMemo(() => withArt(cardEntries(Object.entries(deck))), [deck, basicsDeck]);
-  // Everything you own, used-up cards included (they show dimmed, like Arena).
+  const side = useMemo(() => fitSide(sideSaved, pool), [sideSaved, pool]);
+  const sideEntries = useMemo(() => withArt(cardEntries(Object.entries(side))), [side, basicsDeck]);
+  // Everything you own, used-up cards included (they show dimmed, like Arena). Sideboard
+  // copies are out of the collection, as on Arena.
   const owned = useMemo(() => {
-    const names = new Set([...Object.keys(pool), ...Object.keys(deck)]);
+    const names = new Set([...Object.keys(pool), ...Object.keys(deck), ...Object.keys(side)]);
     if (basics) for (const b of Object.values(BASICS)) names.add(b);
-    return withArt(cardEntries([...names].map((n) => [n, pool[n] ?? 0] as const)));
-  }, [pool, deck, basics, basicsDeck]);
+    return withArt(
+      cardEntries([...names].map((n) => [n, (pool[n] ?? 0) - (side[n] ?? 0)] as const)),
+    );
+  }, [pool, deck, side, basics, basicsDeck]);
   const sorted = useMemo(() => sortEntries(owned, sort, fresh), [owned, sort, fresh]);
   const sets = useMemo(
     () =>
@@ -362,8 +379,8 @@ export function DeckBuilder({
 
   /* ---- changing the deck: every change goes through here so it can be undone */
 
-  const live = useRef({ deck, pool, basics });
-  live.current = { deck, pool, basics };
+  const live = useRef({ deck, pool, basics, side });
+  live.current = { deck, pool, basics, side };
   const log = (ops: Op[]) => ops.length && setHistory((h) => [...h.slice(-49), ops]);
   const add = (e: DeckEntry) => {
     if ((!isFree(e) && !e.count) || blocked?.(e.name)) return;
@@ -375,6 +392,65 @@ export function DeckBuilder({
   const remove = (e: DeckEntry) => {
     onRemove(e.name);
     log([{ op: 'remove', name: e.name }]);
+    play('place', { gain: 0.6 });
+    if (e.count === 1) setHover(null);
+  };
+
+  /* ---- the sideboard: a "maybe" pile beside the deck (basic lands are free, so never in it) */
+
+  const canSide = !!sideboardKey;
+  /** Changes the sideboard and saves it. */
+  const changeSide = (by: Record<string, number>) => {
+    let next = fitSide(sideSaved, live.current.pool);
+    for (const [n, k] of Object.entries(by)) next = bumpSide(next, n, k);
+    setSideSaved(next);
+    if (sideboardKey) saveSideboard(sideboardKey, next);
+  };
+  /** A collection card to the sideboard. */
+  const toSide = (e: DeckEntry) => {
+    if (!canSide || isFree(e) || !e.count) return;
+    changeSide({ [e.name]: 1 });
+    log([{ op: 'side+', name: e.name }]);
+    play('place', { gain: 0.6 });
+    if (e.count === 1) setHover(null);
+  };
+  /** A sideboard card back to the collection. */
+  const fromSide = (e: DeckEntry) => {
+    changeSide({ [e.name]: -1 });
+    log([{ op: 'side-', name: e.name }]);
+    play('place', { gain: 0.6 });
+    if (e.count === 1) setHover(null);
+  };
+  /** A sideboard card into the deck. */
+  const sideToDeck = (e: DeckEntry) => {
+    if (blocked?.(e.name)) return;
+    changeSide({ [e.name]: -1 });
+    onAdd(e.name);
+    log([
+      { op: 'side-', name: e.name },
+      { op: 'add', name: e.name },
+    ]);
+    play('place', { gain: 0.6 });
+    if (e.count === 1) setHover(null);
+  };
+  /** A deck card to the sideboard. */
+  const deckToSide = (e: DeckEntry) => {
+    if (!canSide) return remove(e);
+    // Basic lands are free and unlimited: no point keeping one aside.
+    if (basicColor.has(e.name)) return;
+    onRemove(e.name);
+    // The pool only gains the copy on the next render: count it in now.
+    let next = fitSide(sideSaved, {
+      ...live.current.pool,
+      [e.name]: (live.current.pool[e.name] ?? 0) + 1,
+    });
+    next = bumpSide(next, e.name, 1);
+    setSideSaved(next);
+    if (sideboardKey) saveSideboard(sideboardKey, next);
+    log([
+      { op: 'remove', name: e.name },
+      { op: 'side+', name: e.name },
+    ]);
     play('place', { gain: 0.6 });
     if (e.count === 1) setHover(null);
   };
@@ -409,9 +485,14 @@ export function DeckBuilder({
     // Work on copies: the callbacks' results only show up on the next render.
     const inDeck = { ...live.current.deck };
     const inPool = { ...live.current.pool };
+    let inSide: Counts = live.current.side;
     const free = (n: string) => live.current.basics && basicColor.has(n);
     for (const o of [...last].reverse()) {
-      if (o.op === 'add' && (inDeck[o.name] ?? 0) > 0) {
+      if (o.op === 'side+') {
+        if ((inSide[o.name] ?? 0) > 0) inSide = bumpSide(inSide, o.name, -1);
+      } else if (o.op === 'side-') {
+        if ((inPool[o.name] ?? 0) > (inSide[o.name] ?? 0)) inSide = bumpSide(inSide, o.name, 1);
+      } else if (o.op === 'add' && (inDeck[o.name] ?? 0) > 0) {
         onRemove(o.name);
         inDeck[o.name] = (inDeck[o.name] ?? 0) - 1;
         inPool[o.name] = (inPool[o.name] ?? 0) + 1;
@@ -420,6 +501,10 @@ export function DeckBuilder({
         inPool[o.name] = (inPool[o.name] ?? 0) - 1;
         inDeck[o.name] = (inDeck[o.name] ?? 0) + 1;
       }
+    }
+    if (inSide !== live.current.side) {
+      setSideSaved(inSide);
+      if (sideboardKey) saveSideboard(sideboardKey, inSide);
     }
     setHover(null);
     play('place', { gain: 0.6 });
@@ -448,7 +533,7 @@ export function DeckBuilder({
 
   /* ---- drag and drop */
 
-  const startDrag = (from: 'pool' | 'deck', e: DeckEntry) => (ev: DragEvent) => {
+  const startDrag = (from: Zone, e: DeckEntry) => (ev: DragEvent) => {
     ev.dataTransfer.setData('text/plain', e.name);
     ev.dataTransfer.effectAllowed = 'move';
     setHover(null);
@@ -459,7 +544,7 @@ export function DeckBuilder({
     setOver(null);
   };
   /** A drop target taking cards dragged from `from`. */
-  const zone = (to: 'pool' | 'deck') => {
+  const zone = (to: Zone) => {
     const accepts = drag && drag.from !== to;
     return {
       onDragOver: (ev: DragEvent) => {
@@ -474,13 +559,19 @@ export function DeckBuilder({
       onDrop: (ev: DragEvent) => {
         if (!accepts) return;
         ev.preventDefault();
-        const e = (to === 'deck' ? owned : main).find((c) => c.name === drag.name);
+        const from = drag.from;
+        const e = (from === 'pool' ? owned : from === 'deck' ? main : sideEntries).find(
+          (c) => c.name === drag.name,
+        );
         endDrag();
-        if (e) (to === 'deck' ? add : remove)(e);
+        if (!e) return;
+        if (to === 'deck') (from === 'side' ? sideToDeck : add)(e);
+        else if (to === 'pool') (from === 'side' ? fromSide : remove)(e);
+        else (from === 'deck' ? deckToSide : toSide)(e);
       },
     };
   };
-  const dropClass = (to: 'pool' | 'deck') =>
+  const dropClass = (to: Zone) =>
     drag && drag.from !== to ? `is-target ${over === to ? 'is-over' : ''}` : '';
 
   /** Turns one value of a filter set on or off. */
@@ -505,6 +596,61 @@ export function DeckBuilder({
   const sections = deckSections(main);
   const short = n < min;
   const columns = view === 'columns';
+  const nSide = total(sideEntries);
+
+  const sideboard = canSide && (
+    <section
+      className={`dbk__sideboard ${dropClass('side')}`}
+      aria-label="Sideboard"
+      {...zone('side')}
+    >
+      <h2>
+        Sideboard
+        <span>{nSide}</span>
+      </h2>
+      {sideEntries.length === 0 ? (
+        <p className="dbk__empty dbk__empty--side">
+          Your maybe pile. Drag cards here, use a card’s Side button, or shift-click a deck card. It
+          stays out of your games.
+        </p>
+      ) : (
+        deckSections(sideEntries).flatMap((sec) =>
+          sec.cards.map((e) => (
+            <button
+              key={e.name}
+              className={`dbk-row dbk-row--side ${
+                drag?.name === e.name && drag.from === 'side' ? 'is-dragging' : ''
+              } ${blocked?.(e.name) ? 'is-blocked' : ''}`}
+              title={
+                blocked?.(e.name)
+                  ? `${blocked(e.name)}. Shift-click to put it back in the collection`
+                  : 'Click to put it in the deck, shift-click to put it back in the collection'
+              }
+              draggable
+              onDragStart={startDrag('side', e)}
+              onDragEnd={endDrag}
+              style={e.art ? ({ '--art': `url("${e.art}")` } as CSSProperties) : undefined}
+              onMouseEnter={(ev) => setHover(e, ev.currentTarget)}
+              onMouseLeave={() => setHover(null)}
+              onContextMenu={(ev) => {
+                ev.preventDefault();
+                setHover(e, ev.currentTarget);
+              }}
+              onClick={(ev) => (ev.shiftKey ? fromSide(e) : sideToDeck(e))}
+            >
+              <span className="dbk-row__qty">{e.count}</span>
+              <span className="dbk-row__name">{e.name}</span>
+              <span className="dbk-row__cost">
+                {costSymbols(e.manaCost).map((sym, i) => (
+                  <img key={i} src={symbolUrl(sym)} alt={sym} />
+                ))}
+              </span>
+            </button>
+          )),
+        )
+      )}
+    </section>
+  );
 
   return (
     <div className={`dbk ${columns ? 'dbk--columns' : ''}`}>
@@ -768,6 +914,15 @@ export function DeckBuilder({
                     )}
                     {inDeck > 0 && <span className="dbk-card__in">{inDeck}</span>}
                   </div>
+                  {canSide && !free && e.count > 0 && (
+                    <button
+                      className="dbk-card__side"
+                      title="Put one in the sideboard"
+                      onClick={() => toSide(e)}
+                    >
+                      Side
+                    </button>
+                  )}
                   {onCommand && commandable?.(e.name) && (
                     <button
                       className="dbk-card__command"
@@ -890,7 +1045,10 @@ export function DeckBuilder({
                             className={`dbk-tile ${gap ? 'has-gap' : ''} ${
                               drag?.name === e.name && drag.from === 'deck' ? 'is-dragging' : ''
                             } ${blocked?.(e.name) ? 'is-blocked' : ''}`}
-                            title={blocked?.(e.name) ?? undefined}
+                            title={
+                              blocked?.(e.name) ??
+                              (canSide ? 'Shift-click: to the sideboard' : undefined)
+                            }
                             aria-label={`${e.name}${e.count > 1 ? `, ${e.count} copies` : ''}. Take one out`}
                             draggable
                             onDragStart={startDrag('deck', e)}
@@ -901,7 +1059,7 @@ export function DeckBuilder({
                               ev.preventDefault();
                               setHover(e, ev.currentTarget);
                             }}
-                            onClick={() => remove(e)}
+                            onClick={(ev) => (ev.shiftKey ? deckToSide(e) : remove(e))}
                           >
                             {e.image ? (
                               <img src={e.image} alt="" draggable={false} />
@@ -1052,9 +1210,11 @@ export function DeckBuilder({
 
         <div className="dbk__list">
           {columns ? (
-            <p className="dbk__hint">
-              Your deck is under the collection. Click or drag a card out to take it out.
-            </p>
+            (sideboard ?? (
+              <p className="dbk__hint">
+                Your deck is under the collection. Click or drag a card out to take it out.
+              </p>
+            ))
           ) : (
             <>
               {main.length === 0 && (
@@ -1076,7 +1236,9 @@ export function DeckBuilder({
                         title={
                           blocked?.(e.name)
                             ? `${blocked(e.name)}: take it out`
-                            : 'Take one out of the deck'
+                            : canSide
+                              ? 'Take one out of the deck (shift-click: to the sideboard)'
+                              : 'Take one out of the deck'
                         }
                         draggable
                         onDragStart={startDrag('deck', e)}
@@ -1090,7 +1252,7 @@ export function DeckBuilder({
                           ev.preventDefault();
                           setHover(e, ev.currentTarget);
                         }}
-                        onClick={() => remove(e)}
+                        onClick={(ev) => (ev.shiftKey ? deckToSide(e) : remove(e))}
                       >
                         <span className="dbk-row__qty">{e.count}</span>
                         <span className="dbk-row__name">{e.name}</span>
@@ -1104,6 +1266,7 @@ export function DeckBuilder({
                   </section>
                 ))}
               </div>
+              {sideboard}
             </>
           )}
           {limited &&

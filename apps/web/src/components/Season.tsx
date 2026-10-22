@@ -1142,6 +1142,7 @@ function SeasonEditor({
       pool={pool}
       basics
       min={60}
+      sideboardKey={`season:${deck.id}`}
       tools={
         <>
           <button className="hbtn hbtn--ghost" onClick={onBack}>

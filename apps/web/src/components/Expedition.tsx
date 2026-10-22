@@ -69,6 +69,7 @@ import {
 } from '../game/expedition.ts';
 import { burst, flash, fxOn, later, mountFx, ring } from '../game/fx.ts';
 import { ruleNotes } from '../game/notes.ts';
+import { loadSideboard } from '../game/sideboard.ts';
 import { play } from '../game/sound.ts';
 import { useCardFilters } from './CardFilters.tsx';
 import { DeckBuilder } from './DeckBuilder.tsx';
@@ -1542,11 +1543,12 @@ function ExpeditionBuilder({
   const fresh = useMemo(() => new Set(b.fresh), [b.fresh]);
   const tips = useMemo(() => deckAdvice(b), [b]);
   const deck = runDeck(run);
+  const sideKey = `expedition:${run.seed}`;
   const [confirming, setConfirming] = useState(false);
   const suggest = () => {
     if (!confirming) return setConfirming(true);
     setConfirming(false);
-    update((s) => applySuggestion(s));
+    update((s) => applySuggestion(s, undefined, loadSideboard(sideKey)));
     play('shuffle');
   };
   return (
@@ -1561,6 +1563,7 @@ function ExpeditionBuilder({
       fresh={fresh}
       min={MIN_DECK}
       tips={tips}
+      sideboardKey={sideKey}
       tools={
         <button
           className="btn btn--ghost"
@@ -1573,7 +1576,7 @@ function ExpeditionBuilder({
       }
       onAdd={(name) => update((s) => moveCard(s, name, 'main'))}
       onRemove={(name) => update((s) => moveCard(s, name, 'side'))}
-      onBuildPair={(colors) => update((s) => applySuggestion(s, colors))}
+      onBuildPair={(colors) => update((s) => applySuggestion(s, colors, loadSideboard(sideKey)))}
       onDone={onDone}
     />
   );

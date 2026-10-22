@@ -40,6 +40,7 @@ import {
 } from '../game/sealed.ts';
 import { createSeasonRepository } from '../game/seasonStorage.ts';
 import { ruleNotes } from '../game/notes.ts';
+import { loadSideboard } from '../game/sideboard.ts';
 import { play } from '../game/sound.ts';
 import { DeckBuilder } from './DeckBuilder.tsx';
 import { BoosterReveal, packArt, RANK, rarityOf } from './PackOpening.tsx';
@@ -519,12 +520,13 @@ function Builder({
   );
   const tips = useMemo(() => deckAdvice(build), [build]);
   const deck = useMemo(() => sealedPlayerDeck(event), [event]);
+  const sideKey = `sealed:${event.id}`;
   const [confirming, setConfirming] = useState(false);
   const empty = size(event.main) === 0;
   const suggest = () => {
     if (!empty && !confirming) return setConfirming(true);
     setConfirming(false);
-    update((s) => applySealedSuggestion(s));
+    update((s) => applySealedSuggestion(s, undefined, loadSideboard(sideKey)));
     play('shuffle');
   };
   return (
@@ -539,6 +541,7 @@ function Builder({
       foil={useMemo(() => new Set([sealedPromo(event)]), [event.seed, event.set])}
       min={MIN_DECK}
       tips={tips}
+      sideboardKey={sideKey}
       tools={
         <button
           className="btn btn--ghost"
@@ -551,7 +554,9 @@ function Builder({
       }
       onAdd={(name) => update((s) => moveSealedCard(s, name, 'main'))}
       onRemove={(name) => update((s) => moveSealedCard(s, name, 'side'))}
-      onBuildPair={(colors) => update((s) => applySealedSuggestion(s, colors))}
+      onBuildPair={(colors) =>
+        update((s) => applySealedSuggestion(s, colors, loadSideboard(sideKey)))
+      }
       onDone={onDone}
     />
   );

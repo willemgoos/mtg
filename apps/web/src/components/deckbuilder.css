@@ -729,3 +729,81 @@
   filter: grayscale(0.8) brightness(0.55);
   outline: 0.125rem solid #d9534f;
 }
+
+/* The sideboard: a "maybe" pile under the deck list, or filling the side column in Columns view. */
+.dbk__sideboard {
+  min-height: 6rem;
+  margin-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-top: 0.0625rem solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.375rem;
+}
+
+.dbk--columns .dbk__sideboard {
+  min-height: 100%;
+  margin-top: 0;
+  border-top: 0;
+}
+
+.dbk__sideboard h2 {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0.75rem 0.5rem 0.375rem;
+  font-family: var(--h-font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--h-muted);
+}
+
+.dbk__sideboard h2 span {
+  font-variant-numeric: tabular-nums;
+  color: var(--h-dim);
+}
+
+.dbk__empty--side {
+  margin: 0.75rem 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.dbk-row--side {
+  opacity: 0.85;
+}
+
+.dbk-row--side:hover {
+  opacity: 1;
+}
+
+/* A collection card's "Side" button: shows on hover, top-left of the card. */
+.dbk-card {
+  position: relative;
+}
+
+.dbk-card__side {
+  position: absolute;
+  top: 0.375rem;
+  left: 0.375rem;
+  z-index: 2;
+  padding: 0.0625rem 0.5rem;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(10, 8, 6, 0.85);
+  color: var(--h-text);
+  font-family: var(--h-font);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.dbk-card:hover .dbk-card__side,
+.dbk-card__side:focus-visible {
+  opacity: 1;
+}
+
+.dbk-card__side:hover {
+  border-color: var(--h-accent);
+  color: var(--h-accent);
+}

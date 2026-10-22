@@ -26,6 +26,7 @@ import type { BotKind, LevelBot } from './bot.worker.ts';
 import { manaValue } from './deckView.ts';
 import { type DeckRecord, rng, type RunSummary } from './gauntlet.ts';
 import { rateCard } from './limitedRating.ts';
+import { keepingSideboard } from './sideboard.ts';
 
 /*
  * Expedition: a roguelike run. You set out with a deck and two boosters, then
@@ -2187,8 +2188,16 @@ export function suggestDeck(
 export function applySuggestion(
   s: ExpeditionState,
   colors?: readonly [Color, Color],
+  /** The deck builder's sideboard: left out of the deck. */
+  sideboard: Counts = {},
 ): ExpeditionState {
-  return withRun(s, (r) => ({ ...r, build: { ...r.build, ...suggestDeck(r.build, { colors }) } }));
+  return withRun(s, (r) => ({
+    ...r,
+    build: {
+      ...r.build,
+      ...keepingSideboard(r.build, sideboard, (b) => suggestDeck(b, { colors })),
+    },
+  }));
 }
 
 // ---------------------------------------------------------------------------

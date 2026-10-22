@@ -21,6 +21,7 @@ import {
 import { rng } from './gauntlet.ts';
 import { rateCard } from './limitedRating.ts';
 import { BOT_ODDS, derive, misjudged } from './sealed.ts';
+import { keepingSideboard } from './sideboard.ts';
 
 /*
  * Box Brawl: split a booster box of one set (36 Play Boosters) with your first opponent, 18
@@ -457,14 +458,18 @@ export function rankCommanders(e: Pick<BoxEvent, 'seed' | 'set'>): string[] {
  * Replaces the deck with the suggested 59; the rest of the box goes to `side`. Without a
  * commander it first takes the recommended one.
  */
-export function applyBoxSuggestion(s: BoxState): BoxState {
+export function applyBoxSuggestion(s: BoxState, sideboard: Counts = {}): BoxState {
   if (s.event && !s.event.finished && !s.event.commander)
     s = chooseCommander(s, rankCommanders(s.event)[0]!);
   return withEvent(s, (e) => {
-    if (!e.commander) return e;
-    const pool: Counts = { ...e.side };
-    for (const [n, k] of Object.entries(e.main)) if (!isBasic(n)) pool[n] = (pool[n] ?? 0) + k;
-    const { main, side } = suggestBoxDeck(pool, e.commander);
+    const commander = e.commander;
+    if (!commander) return e;
+    // The deck builder's sideboard stays out of the deck.
+    const { main, side } = keepingSideboard(e, sideboard, (b) => {
+      const pool: Counts = { ...b.side };
+      for (const [n, k] of Object.entries(b.main)) if (!isBasic(n)) pool[n] = (pool[n] ?? 0) + k;
+      return suggestBoxDeck(pool, commander);
+    });
     return { ...e, main, side };
   });
 }

@@ -27,6 +27,7 @@ import {
   type SeasonPackKind,
   type SeasonSave,
 } from './season.ts';
+import { keepingSideboard } from './sideboard.ts';
 
 /*
  * Sealed: Arena's event against bots. You pick a set and open six boosters (72 cards), build a
@@ -276,8 +277,13 @@ const buildOf = (e: Pick<SealedEvent, 'main' | 'side'>): Build => ({
 export function applySealedSuggestion(
   s: SealedState,
   colors?: readonly [Color, Color],
+  /** The deck builder's sideboard: left out of the deck. */
+  sideboard: Counts = {},
 ): SealedState {
-  return withEvent(s, (e) => ({ ...e, ...suggestDeck(buildOf(e), { colors }) }));
+  return withEvent(s, (e) => ({
+    ...e,
+    ...keepingSideboard(buildOf(e), sideboard, (b) => suggestDeck(b, { colors })),
+  }));
 }
 
 /** The deck is big enough to play (40 cards or more). */

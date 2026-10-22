@@ -37,6 +37,7 @@ import { ALL_PACK_SETS, deckAdvice, type PackSet, size } from '../game/expeditio
 import { burst, flash, later, mountFx } from '../game/fx.ts';
 import type { RunSummary } from '../game/gauntlet.ts';
 import { ruleNotes } from '../game/notes.ts';
+import { loadSideboard } from '../game/sideboard.ts';
 import { play } from '../game/sound.ts';
 import { DeckBuilder } from './DeckBuilder.tsx';
 import { BoosterReveal, packArt, RANK, rarityOf } from './PackOpening.tsx';
@@ -445,6 +446,7 @@ function Builder({
   const deckId = useMemo(() => boxPlayerDeck(event)?.id, [event]);
   const identity = commander ? identityOf(commander) : null;
   const outside = outsideColours(event);
+  const sideKey = `box:${event.id}`;
   const blocked = useCallback(
     (name: string) => (identity && !fits(name, identity) ? `Outside ${commander}’s colours` : null),
     [commander],
@@ -476,7 +478,7 @@ function Builder({
   const suggest = () => {
     if (size(event.main) && !confirming) return setConfirming(true);
     setConfirming(false);
-    update(applyBoxSuggestion);
+    update((s) => applyBoxSuggestion(s, loadSideboard(sideKey)));
     play('shuffle');
   };
   return (
@@ -490,6 +492,7 @@ function Builder({
       basicsDeck={deckId}
       min={BOX_MAIN}
       tips={tips}
+      sideboardKey={sideKey}
       blocked={blocked}
       commandable={(name) => name !== commander && canCommand(name) && legends.includes(name)}
       onCommand={(name) => {
